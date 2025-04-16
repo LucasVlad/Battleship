@@ -1,8 +1,11 @@
 const express = require("express");
+const cors = require("cors");
+
 const app = express();
 const port = 3000;
 
 app.use(express.json());
+app.use(cors());
 
 app.listen(port, () => {
   console.log(`Battleship server running on port ${port}`);
@@ -32,6 +35,8 @@ function genPlayerId() {
   return player_id;
 }
 
+// creates a game; doesn't need anything passed in order to work.
+// sends the players id and game code to the client in the response.
 app.post("/create-game", (_req, res) => {
   const player_id = genPlayerId();
   const game_code = genGameCode();
@@ -58,6 +63,10 @@ app.post("/create-game", (_req, res) => {
   });
 });
 
+// used to join an already existing game.
+// requires the game code to be sent in the request body.
+// responds with player id and success message if the game was found and joined.
+// if not it responds with game not found or game is full error messages.
 app.post("/join-game", (req, res) => {
   const game_code = req.body.gameCode;
   const game = active_games.get(game_code);
@@ -91,6 +100,27 @@ app.post("/join-game", (req, res) => {
   });
 });
 
+/*
+Board should be sent as a 2D-array of strings.
+ - "1" should represent a part of ship in that spot
+ - "0" should represent an empty spot
+ - "h" should represent a hit
+ - "m" should represent a miss
+
+example board
+[
+  ["0", "1", "h", "1", "0", "0", "0", "0", "0", "0"],
+  ["0", "0", "0", "0", "0", "m", "0", "0", "0", "0"],
+  ["0", "0", "1", "0", "0", "1", "1", "1", "1", "0"],
+  ["0", "0", "1", "0", "0", "0", "0", "0", "0", "0"],
+  ["0", "0", "1", "0", "0", "0", "0", "0", "0", "0"],
+  ["0", "0", "0", "0", "0", "0", "0", "0", "0", "0"],
+  ["0", "0", "0", "m", "1", "h", "1", "0", "m", "0"],
+  ["0", "0", "0", "0", "0", "0", "0", "0", "0", "0"],
+  ["1", "h", "0", "0", "0", "0", "0", "0", "m", "0"],
+  ["0", "0", "0", "0", "0", "0", "0", "0", "0", "0"]
+]
+*/
 app.post("/submit-board", (req, res) => {
   const { gameCode, playerId, board } = req.body;
   const game = active_games.get(gameCode);
@@ -129,6 +159,90 @@ app.post("/submit-board", (req, res) => {
       currentTurn: game.currentTurn,
       player1Ready: game.player1.ready,
       player2Ready: game.player2.ready,
+    },
+  });
+});
+
+app.post("/take-shot", (req, res) => {
+  // row and col get passed as the standard battleship format.
+  // i.e. row: "A" and col: 1
+  const { gameCode, playerId, row, col } = req.body;
+  const game = active_games.get(gameCode);
+
+  if (!game) {
+    return res.status(404).json({
+      success: false,
+      message: "Game not found",
+    });
+  }
+
+  if (game.status !== GAME_STATES.IN_PROGRESS) {
+    return res.status(400).json({
+      success: false,
+      message: "Game is not in progress",
+    });
+  }
+
+  if (game.currentTurn !== playerId) {
+    return res.status(400).json({
+      success: false,
+      message: "Not your turn",
+    });
+  }
+
+  row = row.toUpperCase().charCodeAt(0) - "A".charCodeAt(0);
+  col = parseInt(col) - 1;
+
+  if (row < 0 || row >= 10 || col < 0 || col >= 10) {
+    return res.status(400).json({
+      success: false,
+      message: "Shot out of bounds",
+    });
+  }
+
+  const is_player1_shooting = playerId === game.player1.id;
+  const target_player = is_player1_shooting ? game.player2 : game.player1;
+
+  const target_board = target_player.board;
+  const target_cell = target_board[row][col];
+
+  let result;
+  if (target_cell === "1") {
+    // hit
+    target_board[row][col] = "h";
+    result = "hit";
+  } else if (target_cell === "0") {
+    target_board[row][col] = "m";
+    result = "miss";
+  } else {
+    return res.status(400).json({
+      success: false,
+      message: "This cell has alread been shot",
+    });
+  }
+
+  game.currentTurn = is_player1_shooting ? game.player2.id : game.player1.id;
+
+  const is_game_over = target_board.every((row) =>
+    row.every((cell) => cell !== "1"),
+  );
+
+  if (is_game_over) {
+    game.status = GAME_STATES.FINISHED;
+    game.winner = playerId;
+  }
+
+  res.json({
+    success: true,
+    result: result,
+    gameState: {
+      status: game.status,
+      currentTurn: game.currentTurn,
+      winner: game.winner,
+      shotLocation: {
+        row: String.fromCharCode(rowNum + "A".charCodeAt(0)),
+        col: (colNum + 1).toString(),
+      },
     },
   });
 });
