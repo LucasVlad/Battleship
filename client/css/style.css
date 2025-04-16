@@ -1,0 +1,38 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 20px;
+    background-color: #f3f3f3;
+  }
+  
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(10, 30px);
+    grid-template-rows: repeat(10, 30px);
+    gap: 2px;
+    margin: 10px auto;
+    width: fit-content;
+  }
+  
+  .grid div {
+    width: 30px;
+    height: 30px;
+    background-color: #cce;
+    border: 1px solid #999;
+    box-sizing: border-box;
+  }
+  
+  #grids {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    margin-top: 20px;
+  }
+  
+  #status-message {
+    margin-top: 20px;
+    font-weight: bold;
+    color: #333;
+  }
+  

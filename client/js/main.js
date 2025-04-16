@@ -1,0 +1,52 @@
+function createGrid(containerId) {
+    const container = document.getElementById(containerId);
+    for (let row = 0; row < 10; row++) {
+      for (let col = 0; col < 10; col++) {
+        const cell = document.createElement('div');
+        cell.dataset.row = row;
+        cell.dataset.col = col;
+        container.appendChild(cell);
+      }
+    }
+  }
+  
+  window.onload = () => {
+    createGrid("your-grid");
+    createGrid("opponent-grid");
+  
+    const startButton = document.getElementById("start-game");
+    const joinButton = document.getElementById("join-game");
+    const input = document.getElementById("game-code-input");
+    const display = document.getElementById("game-code-display");
+  
+    startButton.onclick = async () => {
+      const res = await fetch("http://localhost:3000/create-game", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+      const data = await res.json();
+      if (data.success) {
+        display.textContent = `Game Code: ${data.gameCode}`;
+        localStorage.setItem("playerId", data.playerId);
+        localStorage.setItem("gameCode", data.gameCode);
+      }
+    };
+  
+    joinButton.onclick = async () => {
+      const gameCode = input.value.trim().toUpperCase();
+      const res = await fetch("http://localhost:3000/join-game", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ gameCode })
+      });
+      const data = await res.json();
+      if (data.success) {
+        display.textContent = `Joined Game: ${data.gameCode}`;
+        localStorage.setItem("playerId", data.playerId);
+        localStorage.setItem("gameCode", data.gameCode);
+      } else {
+        display.textContent = data.message || "Join failed";
+      }
+    };
+  };
+  

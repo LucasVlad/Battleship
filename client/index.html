@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Battleship Game</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <h1>Battleship</h1>
+
+  <div id="game-setup">
+    <button id="start-game">Start New Game</button>
+    <button id="join-game">Join Game</button>
+    <input type="text" id="game-code-input" placeholder="Enter Game Code">
+    <p id="game-code-display"></p>
+  </div>
+
+  <div id="grids">
+    <div>
+      <h2>Your Grid</h2>
+      <div id="your-grid" class="grid"></div>
+    </div>
+    <div>
+      <h2>Opponent Grid</h2>
+      <div id="opponent-grid" class="grid"></div>
+    </div>
+  </div>
+
+  <div id="status-message"></div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
