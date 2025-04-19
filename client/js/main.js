@@ -48,5 +48,27 @@ function createGrid(containerId) {
         display.textContent = data.message || "Join failed";
       }
     };
+
+    const yourGrid = document.getElementById("your-grid");
+    yourGrid.addEventListener("click", (e) => {
+      const cell = e.target;
+      if (!cell.dataset.row || !cell.dataset.col) return;
+  
+      const row = parseInt(cell.dataset.row);
+      const col = parseInt(cell.dataset.col);
+      placeShip(row, col); // this function is defined in placement.js
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "r") {
+        isVertical = !isVertical;
+        console.log(`Orientation: ${isVertical ? "Vertical" : "Horizontal"}`);
+      }
+    });
+
+    document.getElementById("ready-button").onclick = () => {
+      console.log("Sending ships to server...");
+      sendShipLayout(); // also from placement.js
+    };
   };
   
