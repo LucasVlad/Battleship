@@ -22,7 +22,11 @@ body {
     border: 1px solid #999;
     box-sizing: border-box;
   }
-  
+
+  .ship {
+    background-color: #444 !important;
+  }
+    
   #grids {
     display: flex;
     justify-content: center;
