@@ -26,7 +26,36 @@ const shipsToPlace = [
   
       cells.push(cell);
     }
+
+    currentShipIndex++;
+
+    if (currentShipIndex === shipsToPlace.length) {
+      document.getElementById("ready-button").style.display = "inline-block";
+    }
   
+    updateShipUI(); 
+
+    function updateShipUI() {
+      const statusText = document.getElementById("ship-status");
+      const orientationText = document.getElementById("orientation-status");
+      const shipList = document.getElementById("ship-list");
+    
+      if (currentShipIndex < shipsToPlace.length) {
+        const currentShip = shipsToPlace[currentShipIndex];
+        statusText.textContent = `Click a grid cell to place: ${currentShip.name} (${currentShip.size})`;
+      } else {
+        statusText.textContent = "All ships placed!";
+      }
+    
+      orientationText.textContent = `Orientation: ${isVertical ? "Vertical" : "Horizontal"} (Press R to rotate)`;
+    
+      // Optional: strike-through ships that have been placed
+      const shipItems = shipList.getElementsByTagName("li");
+      for (let i = 0; i < shipItems.length; i++) {
+        shipItems[i].style.textDecoration = i < currentShipIndex ? "line-through" : "none";
+      }
+    }
+    
     cells.forEach(cell => {
       cell.classList.add("ship");
       cell.style.backgroundColor = "#444";
