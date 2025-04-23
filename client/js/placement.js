@@ -26,12 +26,6 @@ const shipsToPlace = [
   
       cells.push(cell);
     }
-
-    currentShipIndex++;
-
-    if (currentShipIndex === shipsToPlace.length) {
-      document.getElementById("ready-button").style.display = "inline-block";
-    }
   
     updateShipUI(); 
 
