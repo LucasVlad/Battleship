@@ -33,7 +33,25 @@ body {
     gap: 60px;
     margin-top: 20px;
   }
+
+  #ship-info {
+    text-align: left;
+    max-width: 250px;
+    margin: 20px auto;
+    background-color: #f1f1f1;
+    border: 1px solid #aaa;
+    padding: 10px;
+    border-radius: 8px;
+  }
   
+  #ship-info ul {
+    padding-left: 20px;
+  }
+  
+  #ship-info li {
+    margin: 4px 0;
+  }
+    
   #status-message {
     margin-top: 20px;
     font-weight: bold;
