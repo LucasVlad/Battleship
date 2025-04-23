@@ -25,9 +25,7 @@ const shipsToPlace = [
       if (!cell || cell.classList.contains("ship")) return;
   
       cells.push(cell);
-    }
-  
-    updateShipUI(); 
+    } 
 
     function updateShipUI() {
       const statusText = document.getElementById("ship-status");
@@ -64,6 +62,7 @@ const shipsToPlace = [
     });
   
     currentShipIndex++;
+    updateShipUI();
   
     if (currentShipIndex === shipsToPlace.length) {
       console.log("All ships placed!");
