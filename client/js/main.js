@@ -63,6 +63,7 @@ function createGrid(containerId) {
       if (e.key === "r") {
         isVertical = !isVertical;
         console.log(`Orientation: ${isVertical ? "Vertical" : "Horizontal"}`);
+        updateShipUI()
       }
     });
 
