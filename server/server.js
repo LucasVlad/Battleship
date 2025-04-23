@@ -1,13 +1,43 @@
 const express = require("express");
 const cors = require("cors");
+const { createServer } = require("http");
+const { Server } = require("socket.io");
 
 const app = express();
 const port = 3000;
 
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"],
+  },
+});
+
 app.use(express.json());
 app.use(cors());
 
-app.listen(port, () => {
+const playerSockets = new Map();
+io.on("connection", (socket) => {
+  console.log("New Client Connected");
+
+  socket.on("register", ({ playerId, gameCode }) => {
+    playerSockets.set(playerId, gameCode);
+    socket.join(gameCode);
+    console.log(`Player ${playerId} registered for game ${gameCode}`);
+  });
+
+  socket.on("disconnect", () => {
+    for (const [playerId, playerSocket] of playerSockets.entries()) {
+      if (playerSocket === socket) {
+        playerSockets.delete(playerId);
+        break;
+      }
+    }
+  });
+});
+
+httpServer.listen(port, () => {
   console.log(`Battleship server running on port ${port}`);
 });
 
@@ -121,7 +151,7 @@ example board
   ["0", "0", "0", "0", "0", "0", "0", "0", "0", "0"]
 ]
 */
-app.post("/submit-board", (req, res) => {
+app.post("/place-ships", (req, res) => {
   const { gameCode, playerId, board } = req.body;
   const game = active_games.get(gameCode);
 
@@ -232,6 +262,16 @@ app.post("/take-shot", (req, res) => {
     game.winner = playerId;
   }
 
+  io.to(gameCode).emit("gameUpdate", {
+    status: game.status,
+    currentTurn: game.currentTurn,
+    shotResult: {
+      row: String.fromCharCode(rowNum + "A".charCodeAt(0)),
+      col: (colNum + 1).toString(),
+      result: result,
+    },
+  });
+
   res.json({
     success: true,
     result: result,
@@ -246,3 +286,45 @@ app.post("/take-shot", (req, res) => {
     },
   });
 });
+
+/* ** sorta kinda how to implement this on the frontend **
+
+<script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script>
+const socket = io('http://localhost:3000');
+
+
+// ** register player after creating/joining a game **
+function registerPlayer(playerId, gameCode) {
+    socket.emit('register', { playerId, gameCode });
+}
+
+
+// Listen for game updates
+socket.on('gameUpdate', (data) => {
+    const { status, currentTurn, shotResult } = data;
+
+    // Update the UI based on the game state
+    if (shotResult) {
+        // Display the shot result (hit/miss)
+        console.log(`Shot at ${shotResult.row}${shotResult.col} was a ${shotResult.result}`);
+    }
+
+    // Update whose turn it is
+    if (currentTurn === myPlayerId) {
+        // Enable shooting controls
+        console.log("It's your turn!");
+    } else {
+        // Disable shooting controls
+        console.log("Waiting for opponent...");
+    }
+});
+
+// Error handling
+socket.on('connect_error', (error) => {
+    console.log('Connection error:', error);
+});
+
+socket.on('disconnect', () => {
+    console.log('Disconnected from server');
+});
+*/
