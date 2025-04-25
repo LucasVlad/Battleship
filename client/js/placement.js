@@ -1,5 +1,3 @@
-console.log("✅ placement.js loaded");
-
 const shipsToPlace = [
     { name: "Carrier", size: 5 },
     { name: "Battleship", size: 4 },
@@ -113,5 +111,6 @@ const shipsToPlace = [
   
     return board;
   }
-  
+  window.sendShipLayout = sendShipLayout;
+
   
