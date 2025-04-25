@@ -110,6 +110,6 @@ const shipsToPlace = [
     console.log("🧩 Sending board:", board);
     return board;
   }
-  window.sendShipLayout = sendShipLayout;
+ 
 
   
