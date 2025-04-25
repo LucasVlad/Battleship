@@ -11,7 +11,7 @@ function createGrid(containerId) {
   }
 
   const socket = io("http://localhost:3000"); // Connect via Socket.IO
-  
+
   function registerPlayer(playerId, gameCode) {
     socket.emit("register", { playerId, gameCode });
   }
@@ -82,4 +82,34 @@ function createGrid(containerId) {
       sendShipLayout(); // also from placement.js
     };
   };
+
+  let allowShooting = false;
+let myPlayerId = localStorage.getItem("playerId");
+
+socket.on("gameUpdate", (data) => {
+  const { status, currentTurn, shotResult } = data;
+
+  if (shotResult) {
+    const coord = `${shotResult.row}${shotResult.col}`;
+    const opponentGridCell = document.querySelector(
+      `#opponent-grid div[data-coord="${coord}"]`
+    );
+
+    if (opponentGridCell) {
+      opponentGridCell.classList.add(
+        shotResult.result === "hit" ? "hit" : "miss"
+      );
+    }
+
+    console.log(`Shot at ${coord} was a ${shotResult.result}`);
+  }
+
+  if (currentTurn === myPlayerId) {
+    console.log("It's your turn!");
+    allowShooting = true;
+  } else {
+    console.log("Waiting for opponent...");
+    allowShooting = false;
+  }
+});
   
