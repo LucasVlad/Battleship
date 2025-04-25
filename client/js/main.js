@@ -83,7 +83,7 @@ function createGrid(containerId) {
     };
   };
 
-  let allowShooting = false;
+let allowShooting = false;
 let myPlayerId = localStorage.getItem("playerId");
 
 socket.on("gameUpdate", (data) => {
