@@ -98,7 +98,6 @@ const shipsToPlace = [
   }
   
   function buildBoardFromPlacedShips() {
-    console.log("🧩 Sending board:", board);
     const board = Array.from({ length: 10 }, () => Array(10).fill("0"));
   
     placedShips.forEach((ship) => {
@@ -108,7 +107,7 @@ const shipsToPlace = [
         board[r][c] = "1";
       }
     });
-  
+    console.log("🧩 Sending board:", board);
     return board;
   }
   window.sendShipLayout = sendShipLayout;
