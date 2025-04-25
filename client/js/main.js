@@ -69,7 +69,7 @@ function createGrid(containerId) {
       placeShip(row, col); // this function is defined in placement.js
     });
 
-    const opponentGrid = document.getElementById("opponent-grid");
+const opponentGrid = document.getElementById("opponent-grid");
 opponentGrid.addEventListener("click", (e) => {
   const cell = e.target;
   if (!cell.dataset.row || !cell.dataset.col) return;
