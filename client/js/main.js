@@ -69,6 +69,26 @@ function createGrid(containerId) {
       placeShip(row, col); // this function is defined in placement.js
     });
 
+    const opponentGrid = document.getElementById("opponent-grid");
+opponentGrid.addEventListener("click", (e) => {
+  const cell = e.target;
+  if (!cell.dataset.row || !cell.dataset.col) return;
+
+  if (!allowShooting) {
+    console.log("Not your turn yet.");
+    return;
+  }
+
+  if (cell.classList.contains("hit") || cell.classList.contains("miss")) {
+    console.log("Already fired at this cell.");
+    return;
+  }
+
+  const row = parseInt(cell.dataset.row);
+  const col = parseInt(cell.dataset.col);
+  sendShot(row, col);
+});
+
     document.addEventListener("keydown", (e) => {
       if (e.key === "r") {
         isVertical = !isVertical;
