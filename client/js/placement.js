@@ -74,18 +74,40 @@ const shipsToPlace = [
   async function sendShipLayout() {
     const gameCode = localStorage.getItem("gameCode");
     const playerId = localStorage.getItem("playerId");
+    const board = buildBoardFromPlacedShips(); // 👈 correct board
   
-    const response = await fetch("http://localhost:3000/place-ships", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        gameCode: gameCode,
-        playerId: playerId,
-        ships: placedShips
-      })
+    console.log("Sending board to server:", board);
+  
+    try {
+      const response = await fetch("http://localhost:3000/place-ships", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          gameCode: gameCode,
+          playerId: playerId,
+          board: board  // 👈 server expects 'board', not 'ships'
+        })
+      });
+  
+      const data = await response.json();
+      console.log("Server response:", data);
+    } catch (err) {
+      console.error("Error sending ship layout:", err);
+    }
+  }
+  
+  function buildBoardFromPlacedShips() {
+    const board = Array.from({ length: 10 }, () => Array(10).fill("0"));
+  
+    placedShips.forEach((ship) => {
+      for (let i = 0; i < ship.size; i++) {
+        const r = ship.isVertical ? ship.row + i : ship.row;
+        const c = ship.isVertical ? ship.col : ship.col + i;
+        board[r][c] = "1";
+      }
     });
   
-    const data = await response.json();
-    console.log("Server response:", data);
+    return board;
   }
+  
   
