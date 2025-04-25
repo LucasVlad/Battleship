@@ -26,7 +26,15 @@ body {
   .ship {
     background-color: #444 !important;
   }
-    
+
+  .hit {
+    background-color: red !important;
+  }
+  
+  .miss {
+    background-color: lightgray !important;
+  }
+      
   #grids {
     display: flex;
     justify-content: center;
