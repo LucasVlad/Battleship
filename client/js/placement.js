@@ -72,6 +72,7 @@ const shipsToPlace = [
   }
   
   async function sendShipLayout() {
+    console.log("✅ sendShipLayout() called");
     const gameCode = localStorage.getItem("gameCode");
     const playerId = localStorage.getItem("playerId");
     const board = buildBoardFromPlacedShips(); // 👈 correct board
