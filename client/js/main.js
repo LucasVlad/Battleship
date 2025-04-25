@@ -83,6 +83,38 @@ function createGrid(containerId) {
     };
   };
 
+  async function sendShot(row, col) {
+    const gameCode = localStorage.getItem("gameCode");
+    const playerId = localStorage.getItem("playerId");
+  
+    const rowLetter = String.fromCharCode(65 + row); // 0 → A, 1 → B...
+    const colNumber = col + 1; // Make 1-based (1–10)
+  
+    try {
+      const response = await fetch("http://localhost:3000/take-shot", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          gameCode,
+          playerId,
+          row: rowLetter,
+          col: colNumber
+        })
+      });
+  
+      const data = await response.json();
+      if (!data.success) {
+        console.log("Shot rejected:", data.message);
+        return;
+      }
+  
+      console.log(`Shot at ${rowLetter}${colNumber} submitted`);
+      allowShooting = false; // prevent rapid double fire until gameUpdate comes back
+    } catch (err) {
+      console.error("Error sending shot:", err);
+    }
+  }
+  
 let allowShooting = false;
 let myPlayerId = localStorage.getItem("playerId");
 
