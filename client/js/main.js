@@ -98,6 +98,7 @@ opponentGrid.addEventListener("click", (e) => {
     });
 
     document.getElementById("ready-button").onclick = () => {
+      console.log("🟡 Ready button clicked");
       console.log("Sending ships to server...");
       sendShipLayout(); // also from placement.js
     };

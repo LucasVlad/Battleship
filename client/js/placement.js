@@ -1,3 +1,5 @@
+console.log("✅ placement.js loaded");
+
 const shipsToPlace = [
     { name: "Carrier", size: 5 },
     { name: "Battleship", size: 4 },
@@ -72,6 +74,7 @@ const shipsToPlace = [
   }
   
   async function sendShipLayout() {
+    console.log("✅ sendShipLayout() was triggered");
     const gameCode = localStorage.getItem("gameCode");
     const playerId = localStorage.getItem("playerId");
     const board = buildBoardFromPlacedShips(); // 👈 correct board
@@ -97,6 +100,7 @@ const shipsToPlace = [
   }
   
   function buildBoardFromPlacedShips() {
+    console.log("🧩 Sending board:", board);
     const board = Array.from({ length: 10 }, () => Array(10).fill("0"));
   
     placedShips.forEach((ship) => {
