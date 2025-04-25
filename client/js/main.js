@@ -9,6 +9,12 @@ function createGrid(containerId) {
       }
     }
   }
+
+  const socket = io("http://localhost:3000"); // Connect via Socket.IO
+  
+  function registerPlayer(playerId, gameCode) {
+    socket.emit("register", { playerId, gameCode });
+  }
   
   window.onload = () => {
     createGrid("your-grid");
@@ -29,6 +35,8 @@ function createGrid(containerId) {
         display.textContent = `Game Code: ${data.gameCode}`;
         localStorage.setItem("playerId", data.playerId);
         localStorage.setItem("gameCode", data.gameCode);
+
+        registerPlayer(data.playerId, data.gameCode); // Register player with Socket.IO
       }
     };
   
@@ -44,6 +52,8 @@ function createGrid(containerId) {
         display.textContent = `Joined Game: ${data.gameCode}`;
         localStorage.setItem("playerId", data.playerId);
         localStorage.setItem("gameCode", data.gameCode);
+
+        registerPlayer(data.playerId, data.gameCode);
       } else {
         display.textContent = data.message || "Join failed";
       }
