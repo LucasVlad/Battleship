@@ -74,11 +74,6 @@ opponentGrid.addEventListener("click", (e) => {
   const cell = e.target;
   if (!cell.dataset.row || !cell.dataset.col) return;
 
-  if (!allowShooting) {
-    console.log("Not your turn yet.");
-    return;
-  }
-
   if (cell.classList.contains("hit") || cell.classList.contains("miss")) {
     console.log("Already fired at this cell.");
     return;
