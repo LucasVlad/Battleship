@@ -184,8 +184,7 @@ socket.on("gameUpdate", (data) => {
   }
 
   if (shotResult) {
-    const coord = `${shotResult.row}${shotResult.col}`;
-
+    const coord = `${String.fromCharCode(65 + shotResult.row)}${shotResult.col + 1}`;
     // Always mark if I got hit (defensive update on my Your Grid)
     if (shotResult.shooter !== myPlayerId) {
       // Opponent fired, mark your grid
