@@ -1,14 +1,20 @@
 function createGrid(containerId) {
-    const container = document.getElementById(containerId);
-    for (let row = 0; row < 10; row++) {
-      for (let col = 0; col < 10; col++) {
-        const cell = document.createElement('div');
-        cell.dataset.row = row;
-        cell.dataset.col = col;
-        container.appendChild(cell);
-      }
+  const container = document.getElementById(containerId);
+  for (let row = 0; row < 10; row++) {
+    for (let col = 0; col < 10; col++) {
+      const cell = document.createElement('div');
+      cell.dataset.row = row;
+      cell.dataset.col = col;
+
+      // 🛠 ADD THIS to help gameUpdate find the cell
+      const rowLetter = String.fromCharCode(65 + row); // A, B, C, etc.
+      cell.dataset.coord = `${rowLetter}${col + 1}`;   // Example: A1, B7
+
+      container.appendChild(cell);
     }
   }
+}
+
 
   const socket = io("http://localhost:3000"); // Connect via Socket.IO
 
