@@ -5,6 +5,7 @@ function createGrid(containerId) {
       const cell = document.createElement("div");
       cell.dataset.row = row;
       cell.dataset.col = col;
+      cell.dataset.coord = `${String.fromCharCode(65 + row)}${col + 1}`; // Add data-coord
       container.appendChild(cell);
     }
   }
