@@ -185,39 +185,29 @@ socket.on("gameUpdate", (data) => {
 
   if (shotResult) {
     const coord = `${String.fromCharCode(65 + shotResult.row)}${shotResult.col + 1}`;
-    // Always mark if I got hit (defensive update on my Your Grid)
+    console.log("Shot result received:", shotResult);
+    console.log("Calculated coord:", coord);
+
+    // Opponent fired, mark your grid
     if (shotResult.shooter !== myPlayerId) {
-      // Opponent fired, mark your grid
       const yourGridCell = document.querySelector(
         `#your-grid div[data-coord="${coord}"]`
       );
       if (yourGridCell) {
-        yourGridCell.classList.add(
-          shotResult.result === "hit" ? "hit" : "miss"
-        );
+        yourGridCell.textContent = shotResult.result === "hit" ? "X" : "O";
       }
       console.log(`Opponent fired at your grid at ${coord}: ${shotResult.result}`);
     }
-    
+
+    // Shooter fired, mark opponent's grid
     if (shotResult.shooter === myPlayerId) {
-      // Shooter fired, mark opponent's grid
       const opponentGridCell = document.querySelector(
         `#opponent-grid div[data-coord="${coord}"]`
       );
       if (opponentGridCell) {
-        opponentGridCell.classList.add(
-          shotResult.result === "hit" ? "hit" : "miss"
-        );
+        opponentGridCell.textContent = shotResult.result === "hit" ? "X" : "O";
       }
       console.log(`You fired at opponent's grid at ${coord}: ${shotResult.result}`);
     }
-
-  if (currentTurn === myPlayerId) {
-    console.log("It's your turn!");
-    allowShooting = true;
-  } else {
-    console.log("Waiting for opponent...");
-    allowShooting = false;
-  }
   }
 });
