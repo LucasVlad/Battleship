@@ -203,14 +203,14 @@ socket.on("gameUpdate", (data) => {
     // Always mark if I fired (offensive update on opponent grid)
     if (shotResult.shooter === myPlayerId) {
       const opponentGridCell = document.querySelector(
-        `#opponent-grid div[data-coord="${coord}"]`
+        `#opponent-grid div[data-coord="${shotResult.row}${shotResult.col}"]`
       );
       if (opponentGridCell) {
         opponentGridCell.classList.add(
           shotResult.result === "hit" ? "hit" : "miss"
         );
       }
-      console.log(`You fired at opponent's grid at ${coord}: ${shotResult.result}`);
+      console.log(`You fired at opponent's grid at ${shotResult.row}${shotResult.col}: ${shotResult.result}`);
     }
   }
 
