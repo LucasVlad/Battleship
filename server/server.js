@@ -177,9 +177,21 @@ app.post("/place-ships", (req, res) => {
     game.player2.ready = true;
   }
 
+  io.to(gameCode).emit("gameUpdate", {
+    status: game.status,
+    player1Ready: game.player1.ready,
+    player2Ready: game.player2?.ready,
+  });
+
   if (game.player1.ready && game.player2?.ready) {
     game.status = GAME_STATES.IN_PROGRESS;
     game.currentTurn = game.player1.id;
+
+    io.to(gameCode).emit("gameUpdate", {
+      status: game.status,
+      currentTurn: game.currentTurn,
+      message: "Game started!",
+    });
   }
 
   res.json({
@@ -220,10 +232,10 @@ app.post("/take-shot", (req, res) => {
     });
   }
 
-  row = row.toUpperCase().charCodeAt(0) - "A".charCodeAt(0);
-  col = parseInt(col) - 1;
+  const rowNum = row.toUpperCase().charCodeAt(0) - "A".charCodeAt(0);
+  const colNum = parseInt(col) - 1;
 
-  if (row < 0 || row >= 10 || col < 0 || col >= 10) {
+  if (rowNum < 0 || rowNum >= 10 || colNum < 0 || colNum >= 10) {
     return res.status(400).json({
       success: false,
       message: "Shot out of bounds",
@@ -234,15 +246,15 @@ app.post("/take-shot", (req, res) => {
   const target_player = is_player1_shooting ? game.player2 : game.player1;
 
   const target_board = target_player.board;
-  const target_cell = target_board[row][col];
+  const target_cell = target_board[rowNum][colNum];
 
   let result;
   if (target_cell === "1") {
     // hit
-    target_board[row][col] = "h";
+    target_board[rowNum][colNum] = "h";
     result = "hit";
   } else if (target_cell === "0") {
-    target_board[row][col] = "m";
+    target_board[rowNum][colNum] = "m";
     result = "miss";
   } else {
     return res.status(400).json({
@@ -253,8 +265,8 @@ app.post("/take-shot", (req, res) => {
 
   game.currentTurn = is_player1_shooting ? game.player2.id : game.player1.id;
 
-  const is_game_over = target_board.every((row) =>
-    row.every((cell) => cell !== "1"),
+  const is_game_over = target_board.every((rowNum) =>
+    rowNum.every((cell) => cell !== "1"),
   );
 
   if (is_game_over) {
