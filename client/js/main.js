@@ -188,7 +188,7 @@ socket.on("gameUpdate", (data) => {
 
     // Always mark if I got hit (defensive update on my Your Grid)
     if (shotResult.shooter !== myPlayerId) {
-      // opponent fired, hit my board
+      // Opponent fired, mark your grid
       const yourGridCell = document.querySelector(
         `#your-grid div[data-coord="${coord}"]`
       );
@@ -199,9 +199,9 @@ socket.on("gameUpdate", (data) => {
       }
       console.log(`Opponent fired at your grid at ${coord}: ${shotResult.result}`);
     }
-
-    // Always mark if I fired (offensive update on opponent grid)
+    
     if (shotResult.shooter === myPlayerId) {
+      // Shooter fired, mark opponent's grid
       const opponentGridCell = document.querySelector(
         `#opponent-grid div[data-coord="${coord}"]`
       );
@@ -212,7 +212,6 @@ socket.on("gameUpdate", (data) => {
       }
       console.log(`You fired at opponent's grid at ${coord}: ${shotResult.result}`);
     }
-  }
 
   if (currentTurn === myPlayerId) {
     console.log("It's your turn!");
@@ -220,5 +219,6 @@ socket.on("gameUpdate", (data) => {
   } else {
     console.log("Waiting for opponent...");
     allowShooting = false;
+  }
   }
 });
