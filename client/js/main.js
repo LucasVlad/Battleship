@@ -164,14 +164,7 @@ let allowShooting = false;
 let myPlayerId = localStorage.getItem("playerId");
 
 socket.on("gameUpdate", (data) => {
-  const {
-    status,
-    currentTurn,
-    shotResult,
-    player1Ready,
-    player2Ready,
-    message,
-  } = data;
+  const { status, currentTurn, shotResult, player1Ready, player2Ready, message } = data;
 
   if (player1Ready !== undefined && player2Ready !== undefined) {
     const statusMessage = document.getElementById("status-message");
@@ -191,35 +184,33 @@ socket.on("gameUpdate", (data) => {
   }
 
   if (shotResult) {
-    const coord = `${String.fromCharCode(65 + shotResult.row)}${shotResult.col}`;
+    const coord = `${shotResult.row}${shotResult.col}`;
 
-    // ✅ 1. If YOU fired, update Opponent Grid only
-    if (shotResult.shooter === myPlayerId) {
-      const opponentGridCell = document.querySelector(
-        `#opponent-grid div[data-coord="${String.fromCharCode(65 + shotResult.row)}${shotResult.col}"]`
-      );
-
-      if (opponentGridCell) {
-        opponentGridCell.classList.add(
-          shotResult.result === "hit" ? "hit" : "miss"
-        );
-      }
-
-      console.log(`Your shot at ${coord} was a ${shotResult.result}`);
-    }
-    // ✅ 2. If OPPONENT fired, update Your Grid only
-    else {
+    // Always mark if I got hit (defensive update on my Your Grid)
+    if (shotResult.shooter !== myPlayerId) {
+      // opponent fired, hit my board
       const yourGridCell = document.querySelector(
         `#your-grid div[data-coord="${coord}"]`
       );
-
       if (yourGridCell) {
         yourGridCell.classList.add(
           shotResult.result === "hit" ? "hit" : "miss"
         );
       }
+      console.log(`Opponent fired at your grid at ${coord}: ${shotResult.result}`);
+    }
 
-      console.log(`Opponent's shot at ${coord} was a ${shotResult.result}`);
+    // Always mark if I fired (offensive update on opponent grid)
+    if (shotResult.shooter === myPlayerId) {
+      const opponentGridCell = document.querySelector(
+        `#opponent-grid div[data-coord="${coord}"]`
+      );
+      if (opponentGridCell) {
+        opponentGridCell.classList.add(
+          shotResult.result === "hit" ? "hit" : "miss"
+        );
+      }
+      console.log(`You fired at opponent's grid at ${coord}: ${shotResult.result}`);
     }
   }
 
