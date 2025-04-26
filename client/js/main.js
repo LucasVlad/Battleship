@@ -166,6 +166,9 @@ let myPlayerId = localStorage.getItem("playerId");
 socket.on("gameUpdate", (data) => {
   const { status, currentTurn, shotResult, player1Ready, player2Ready, message } = data;
 
+  // Make sure myPlayerId is defined
+  const myPlayerId = localStorage.getItem("playerId");
+  
   if (player1Ready !== undefined && player2Ready !== undefined) {
     const statusMessage = document.getElementById("status-message");
     if (player1Ready && player2Ready) {
@@ -184,33 +187,38 @@ socket.on("gameUpdate", (data) => {
   }
 
   if (shotResult) {
-    const coord = `${String.fromCharCode(65 + shotResult.row)}${shotResult.col + 1}`;
-    // Always mark if I got hit (defensive update on my Your Grid)
+    console.log("Shot result received:", shotResult);
+    
+    // Form the coordinate string in the format expected by data-coord
+    const coord = `${shotResult.row}${shotResult.col}`;
+    console.log("Looking for coordinate:", coord);
+    
     if (shotResult.shooter !== myPlayerId) {
       // Opponent fired, mark your grid
       const yourGridCell = document.querySelector(
         `#your-grid div[data-coord="${coord}"]`
       );
+      console.log("Your grid cell found:", yourGridCell);
       if (yourGridCell) {
         yourGridCell.classList.add(
           shotResult.result === "hit" ? "hit" : "miss"
         );
       }
-      console.log(`Opponent fired at your grid at ${coord}: ${shotResult.result}`);
     }
     
     if (shotResult.shooter === myPlayerId) {
-      // Shooter fired, mark opponent's grid
+      // You fired, mark opponent's grid
       const opponentGridCell = document.querySelector(
         `#opponent-grid div[data-coord="${coord}"]`
       );
+      console.log("Opponent grid cell found:", opponentGridCell);
       if (opponentGridCell) {
         opponentGridCell.classList.add(
           shotResult.result === "hit" ? "hit" : "miss"
         );
       }
-      console.log(`You fired at opponent's grid at ${coord}: ${shotResult.result}`);
     }
+  }
 
   if (currentTurn === myPlayerId) {
     console.log("It's your turn!");
@@ -218,6 +226,5 @@ socket.on("gameUpdate", (data) => {
   } else {
     console.log("Waiting for opponent...");
     allowShooting = false;
-  }
   }
 });
