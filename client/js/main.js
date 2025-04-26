@@ -191,12 +191,12 @@ socket.on("gameUpdate", (data) => {
   }
 
   if (shotResult) {
-    const coord = `${shotResult.row}${shotResult.col}`;
+    const coord = `${String.fromCharCode(65 + shotResult.row)}${shotResult.col}`;
 
     // ✅ 1. If YOU fired, update Opponent Grid only
     if (shotResult.shooter === myPlayerId) {
       const opponentGridCell = document.querySelector(
-        `#opponent-grid div[data-coord="${coord}"]`
+        `#opponent-grid div[data-coord="${String.fromCharCode(65 + shotResult.row)}${shotResult.col}"]`
       );
 
       if (opponentGridCell) {
