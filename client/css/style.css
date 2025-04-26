@@ -15,29 +15,26 @@ body {
     width: fit-content;
   }
   
-  /* Center text in grid cells */
-.grid div {
-  display: flex; /* Use flexbox for centering */
-  justify-content: center; /* Horizontally center the text */
-  align-items: center; /* Vertically center the text */
-  font-size: 20px; /* Increase font size for better visibility */
-  font-weight: bold; /* Make the text bold */
-  color: black; /* Default text color */
-}
-
-/* Optional: Different colors for hits and misses */
-.grid div.hit {
-  color: red; /* Text color for hits */
-}
-
-.grid div.miss {
-  color: blue; /* Text color for misses */
-}
+  .grid div {
+    width: 30px;
+    height: 30px;
+    background-color: #cce;
+    border: 1px solid #999;
+    box-sizing: border-box;
+  }
 
   .ship {
     background-color: #444 !important;
   }
+
+  .hit {
+    background-color: red !important;
+  }
   
+  .miss {
+    background-color: lightgray !important;
+  }
+      
   #grids {
     display: flex;
     justify-content: center;
