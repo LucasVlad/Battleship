@@ -281,6 +281,7 @@ app.post("/take-shot", (req, res) => {
       row: String.fromCharCode(rowNum + "A".charCodeAt(0)),
       col: (colNum + 1).toString(),
       result: result,
+      shooter: playerId,
     },
   });
 
