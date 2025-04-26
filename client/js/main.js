@@ -178,36 +178,18 @@ socket.on("gameUpdate", (data) => {
     }
   }
 
-  if (status === "in_progress") {
-    const statusMessage = document.getElementById("status-message");
-    statusMessage.textContent =
-      message ||
-      (currentTurn === myPlayerId ? "Your turn!" : "Opponent's turn!");
-    allowShooting = currentTurn === myPlayerId;
-  }
-
   if (shotResult) {
+    // Debug what we're receiving
     console.log("Shot result received:", shotResult);
     
-    // Form the coordinate string in the format expected by data-coord
+    // Use the coordinates directly from the server
     const coord = `${shotResult.row}${shotResult.col}`;
     console.log("Looking for coordinate:", coord);
     
-    if (shotResult.shooter !== myPlayerId) {
-      // Opponent fired, mark your grid
-      const yourGridCell = document.querySelector(
-        `#your-grid div[data-coord="${coord}"]`
-      );
-      console.log("Your grid cell found:", yourGridCell);
-      if (yourGridCell) {
-        yourGridCell.classList.add(
-          shotResult.result === "hit" ? "hit" : "miss"
-        );
-      }
-    }
+    // The key issue: we're using the wrong condition to determine which grid to update
     
     if (shotResult.shooter === myPlayerId) {
-      // You fired, mark opponent's grid
+      // I am the shooter - update MY opponent grid (to show where I fired)
       const opponentGridCell = document.querySelector(
         `#opponent-grid div[data-coord="${coord}"]`
       );
@@ -217,14 +199,19 @@ socket.on("gameUpdate", (data) => {
           shotResult.result === "hit" ? "hit" : "miss"
         );
       }
+      console.log(`You fired at opponent's grid at ${coord}: ${shotResult.result}`);
+    } else {
+      // I am the defender - update MY grid (to show where I was hit)
+      const yourGridCell = document.querySelector(
+        `#your-grid div[data-coord="${coord}"]`
+      );
+      console.log("Your grid cell found:", yourGridCell);
+      if (yourGridCell) {
+        yourGridCell.classList.add(
+          shotResult.result === "hit" ? "hit" : "miss"
+        );
+      }
+      console.log(`Opponent fired at your grid at ${coord}: ${shotResult.result}`);
     }
-  }
-
-  if (currentTurn === myPlayerId) {
-    console.log("It's your turn!");
-    allowShooting = true;
-  } else {
-    console.log("Waiting for opponent...");
-    allowShooting = false;
   }
 });
