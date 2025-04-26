@@ -193,30 +193,33 @@ socket.on("gameUpdate", (data) => {
   if (shotResult) {
     const coord = `${shotResult.row}${shotResult.col}`;
 
-    //Check if the shot was made by the current player
+    // ✅ 1. If YOU fired, update Opponent Grid only
     if (shotResult.shooter === myPlayerId) {
       const opponentGridCell = document.querySelector(
-        `#opponent-grid div[data-coord="${coord}"]`,
+        `#opponent-grid div[data-coord="${coord}"]`
       );
 
       if (opponentGridCell) {
         opponentGridCell.classList.add(
-          shotResult.result === "hit" ? "hit" : "miss",
+          shotResult.result === "hit" ? "hit" : "miss"
         );
       }
 
       console.log(`Your shot at ${coord} was a ${shotResult.result}`);
-    } else {
+    }
+    // ✅ 2. If OPPONENT fired, update Your Grid only
+    else {
       const yourGridCell = document.querySelector(
-        `#your-grid div[data-coord="${coord}"]`,
+        `#your-grid div[data-coord="${coord}"]`
       );
 
       if (yourGridCell) {
         yourGridCell.classList.add(
-          shotResult.result === "hit" ? "hit" : "miss",
+          shotResult.result === "hit" ? "hit" : "miss"
         );
       }
-      console.log(`Opponent's shot at ${coord}`);
+
+      console.log(`Opponent's shot at ${coord} was a ${shotResult.result}`);
     }
   }
 
