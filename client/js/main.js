@@ -36,8 +36,39 @@ window.onload = () => {
       localStorage.setItem("playerId", data.playerId);
       localStorage.setItem("gameCode", data.gameCode);
 
+<<<<<<< HEAD
       registerPlayer(data.playerId, data.gameCode); // Register player with Socket.IO
     }
+=======
+const opponentGrid = document.getElementById("opponent-grid");
+opponentGrid.addEventListener("click", (e) => {
+  const cell = e.target;
+  if (!cell.dataset.row || !cell.dataset.col) return;
+
+  if (cell.classList.contains("hit") || cell.classList.contains("miss")) {
+    console.log("Already fired at this cell.");
+    return;
+  }
+
+  const row = parseInt(cell.dataset.row);
+  const col = parseInt(cell.dataset.col);
+  sendShot(row, col);
+});
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "r") {
+        isVertical = !isVertical;
+        console.log(`Orientation: ${isVertical ? "Vertical" : "Horizontal"}`);
+        updateShipUI()
+      }
+    });
+
+    document.getElementById("ready-button").onclick = () => {
+      console.log("🟡 Ready button clicked");
+      console.log("Sending ships to server...");
+      sendShipLayout(); // also from placement.js
+    };
+>>>>>>> ec249eb2c75307db780d8c241c5ef7ce51302b18
   };
 
   joinButton.onclick = async () => {
