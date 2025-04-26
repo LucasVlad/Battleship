@@ -194,7 +194,7 @@ socket.on("gameUpdate", (data) => {
     const coord = `${shotResult.row}${shotResult.col}`;
 
     //Check if the shot was made by the current player
-    if (shotResult.shooter === myPlayerID) {
+    if (shotResult.shooter === myPlayerId) {
       const opponentGridCell = document.querySelector(
         `#opponent-grid div[data-coord="${coord}"]`,
       );
@@ -207,6 +207,15 @@ socket.on("gameUpdate", (data) => {
 
       console.log(`Your shot at ${coord} was a ${shotResult.result}`);
     } else {
+      const yourGridCell = document.querySelector(
+        `#your-grid div[data-coord="${coord}"]`,
+      );
+
+      if (yourGridCell) {
+        yourGridCell.classList.add(
+          shotResult.result === "hit" ? "hit" : "miss",
+        );
+      }
       console.log(`Opponent's shot at ${coord}`);
     }
   }
