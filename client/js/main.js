@@ -197,7 +197,8 @@ socket.on("gameUpdate", (data) => {
   if (status === "finished") {
     const statusMessage = document.getElementById("status-message");
     
-    if (winner === myPlayerId) {
+    // In Battleship, the last person to shoot when the game ends is the winner
+    if (shotResult && shotResult.shooter === myPlayerId) {
       statusMessage.textContent = "Congratulations! You won the game!";
       statusMessage.style.color = "#2c7";  // Green color
       celebrateWin();
@@ -213,10 +214,10 @@ socket.on("gameUpdate", (data) => {
     const playAgainBtn = document.createElement("button");
     playAgainBtn.textContent = "Play Again";
     playAgainBtn.onclick = resetGame;
+    playAgainBtn.id = "play-again-btn";
     
     // Only add the button if it doesn't already exist
     if (!document.getElementById("play-again-btn")) {
-      playAgainBtn.id = "play-again-btn";
       document.body.appendChild(playAgainBtn);
     }
   }
