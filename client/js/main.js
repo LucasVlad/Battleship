@@ -63,13 +63,7 @@ window.onload = () => {
       sendShot(row, col);
     });
 
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "r") {
-        isVertical = !isVertical;
-        console.log(`Orientation: ${isVertical ? "Vertical" : "Horizontal"}`);
-        updateShipUI();
-      }
-    });
+    
 
     document.getElementById("ready-button").onclick = () => {
       console.log("🟡 Ready button clicked");
