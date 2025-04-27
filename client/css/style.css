@@ -222,15 +222,25 @@ h2 {
 }
 
 /* Status message */
+/* Updated status message styling */
 #status-message {
   margin: 20px auto;
   padding: 10px;
   font-weight: bold;
   color: #2c3e50;
-  background-color: #f8f9fa;
+  background-color: transparent; /* Changed from white/light background to transparent */
   border-radius: 5px;
   max-width: 500px;
   font-size: 1.1em;
+}
+
+/* Add this style to make important status messages more visible */
+#status-message.important {
+  color: #e74c3c; /* Red text for important messages like game over */
+}
+
+#status-message.success {
+  color: #27ae60; /* Green text for success messages like winning */
 }
 
 /* Winner animation */
