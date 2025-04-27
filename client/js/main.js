@@ -1,3 +1,12 @@
+// Add this constant at the very top of main.js
+const GAME_STATES = {
+  WAITING: "waiting",
+  PLACING_SHIPS: "placing_ships",
+  IN_PROGRESS: "in_progress",
+  FINISHED: "finished",
+};
+
+
 function createGrid(containerId) {
   const container = document.getElementById(containerId);
   for (let row = 0; row < 10; row++) {
@@ -164,17 +173,51 @@ let allowShooting = false;
 let myPlayerId = localStorage.getItem("playerId");
 
 socket.on("gameUpdate", (data) => {
-  const { status, currentTurn, shotResult, player1Ready, player2Ready, message } = data;
-
-  // Make sure myPlayerId is defined
+  const { status, currentTurn, shotResult, player1Ready, player2Ready, message, winner } = data;
   const myPlayerId = localStorage.getItem("playerId");
-  
+
   if (player1Ready !== undefined && player2Ready !== undefined) {
     const statusMessage = document.getElementById("status-message");
     if (player1Ready && player2Ready) {
       statusMessage.textContent = "Both players ready! Game starting...";
     } else {
       statusMessage.textContent = "Waiting for other player...";
+    }
+  }
+
+  if (status === "in_progress") {
+    const statusMessage = document.getElementById("status-message");
+    statusMessage.textContent =
+      message ||
+      (currentTurn === myPlayerId ? "Your turn!" : "Opponent's turn!");
+    allowShooting = currentTurn === myPlayerId;
+  }
+
+  // New code to handle game over
+  if (status === "finished") {
+    const statusMessage = document.getElementById("status-message");
+    
+    if (winner === myPlayerId) {
+      statusMessage.textContent = "Congratulations! You won the game!";
+      statusMessage.style.color = "#2c7";  // Green color
+      celebrateWin();
+    } else {
+      statusMessage.textContent = "Game over. Your opponent won.";
+      statusMessage.style.color = "#e44";  // Red color
+    }
+    
+    // Disable further shooting
+    allowShooting = false;
+    
+    // Add a "Play Again" button
+    const playAgainBtn = document.createElement("button");
+    playAgainBtn.textContent = "Play Again";
+    playAgainBtn.onclick = resetGame;
+    
+    // Only add the button if it doesn't already exist
+    if (!document.getElementById("play-again-btn")) {
+      playAgainBtn.id = "play-again-btn";
+      document.body.appendChild(playAgainBtn);
     }
   }
 
@@ -185,8 +228,6 @@ socket.on("gameUpdate", (data) => {
     // Use the coordinates directly from the server
     const coord = `${shotResult.row}${shotResult.col}`;
     console.log("Looking for coordinate:", coord);
-    
-    // The key issue: we're using the wrong condition to determine which grid to update
     
     if (shotResult.shooter === myPlayerId) {
       // I am the shooter - update MY opponent grid (to show where I fired)
@@ -214,4 +255,56 @@ socket.on("gameUpdate", (data) => {
       console.log(`Opponent fired at your grid at ${coord}: ${shotResult.result}`);
     }
   }
+
+  if (currentTurn === myPlayerId) {
+    console.log("It's your turn!");
+    allowShooting = true;
+  } else {
+    console.log("Waiting for opponent...");
+    allowShooting = false;
+  }
 });
+
+// Add these helper functions after the gameUpdate handler
+function celebrateWin() {
+  // Simple celebration effect
+  const yourGrid = document.getElementById("your-grid");
+  const opponentGrid = document.getElementById("opponent-grid");
+  
+  yourGrid.classList.add("winner");
+  opponentGrid.classList.add("winner");
+  
+  // Remove the effect after 3 seconds
+  setTimeout(() => {
+    yourGrid.classList.remove("winner");
+    opponentGrid.classList.remove("winner");
+  }, 3000);
+}
+
+function resetGame() {
+  // Clear the grids
+  const yourGrid = document.getElementById("your-grid");
+  const opponentGrid = document.getElementById("opponent-grid");
+  
+  // Remove all ship, hit, and miss classes
+  yourGrid.querySelectorAll("div").forEach(cell => {
+    cell.classList.remove("ship", "hit", "miss");
+  });
+  
+  opponentGrid.querySelectorAll("div").forEach(cell => {
+    cell.classList.remove("hit", "miss");
+  });
+  
+  // Reset game state
+  currentShipIndex = 0;
+  placedShips = [];
+  
+  // Remove the play again button
+  const playAgainBtn = document.getElementById("play-again-btn");
+  if (playAgainBtn) {
+    playAgainBtn.remove();
+  }
+  
+  // Redirect to start screen or restart the process
+  window.location.reload(); // Simple solution - just reload the page
+}
