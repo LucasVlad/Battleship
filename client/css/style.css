@@ -1,138 +1,269 @@
 body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    margin: 0;
-    padding: 20px;
-    background-color: #f3f3f3;
-  }
-  
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(10, 30px);
-    grid-template-rows: repeat(10, 30px);
-    gap: 2px;
-    margin: 10px auto;
-    width: fit-content;
-  }
-  
-  .grid div {
-    width: 30px;
-    height: 30px;
-    background-color: #cce;
-    border: 1px solid #999;
-    box-sizing: border-box;
-  }
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  text-align: center;
+  margin: 0;
+  padding: 20px;
+  background-color: #e6f2ff;
+  color: #333;
+}
 
-  .ship {
-    background-color: #444 !important;
-  }
+h1 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+  font-size: 2.5em;
+}
 
-  .hit {
-    background-color: red !important;
-  }
-  
-  .miss {
-    background-color: lightgray !important;
-  }
-      
-  #grids {
-    display: flex;
-    justify-content: center;
-    gap: 60px;
-    margin-top: 20px;
-  }
-  
-  #color-legend {
-    max-width: 200px;
-    margin: 20px auto;
-    padding: 10px;
-    background-color: #f1f1f1;
-    border: 1px solid #aaa;
-    border-radius: 8px;
-    text-align: left;
-  }
-  
-  #color-legend h3 {
-    text-align: center;
-    margin-top: 0;
-    margin-bottom: 10px;
-  }
-  
-  .legend-item {
-    display: flex;
-    align-items: center;
-    margin: 5px 0;
-  }
-  
-  .legend-color {
-    width: 20px;
-    height: 20px;
-    margin-right: 10px;
-    border: 1px solid #999;
-  }
-  
-  .legend-color.ship {
-    background-color: #444;
-  }
-  
-  .legend-color.hit {
-    background-color: red;
-  }
-  
-  .legend-color.miss {
-    background-color: lightgray;
-  }
+h2 {
+  color: #34495e;
+  margin-bottom: 10px;
+}
 
-  #ship-info {
-    text-align: left;
-    max-width: 250px;
-    margin: 20px auto;
-    background-color: #f1f1f1;
-    border: 1px solid #aaa;
-    padding: 10px;
-    border-radius: 8px;
-  }
-  
-  #ship-info ul {
-    padding-left: 20px;
-  }
-  
-  #ship-info li {
-    margin: 4px 0;
-  }
-    
-  #status-message {
-    margin-top: 20px;
-    font-weight: bold;
-    color: #333;
-  }
+/* Game setup area */
+#game-setup {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 25px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
 
-  .winner {
-    animation: winner-glow 1s infinite alternate;
+#game-setup button {
+  padding: 10px 20px;
+  margin: 0 8px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+#game-setup button:hover {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+#game-code-input {
+  padding: 10px;
+  margin: 0 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1em;
+  width: 150px;
+}
+
+#game-code-display {
+  font-weight: bold;
+  margin-top: 12px;
+  padding: 8px;
+  color: #2c3e50;
+  font-size: 1.1em;
+}
+
+/* Grid layout */
+#grids {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  margin: 25px auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(10, 35px);
+  grid-template-rows: repeat(10, 35px);
+  gap: 3px;
+  margin: 10px auto;
+  width: fit-content;
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.grid div {
+  width: 35px;
+  height: 35px;
+  background-color: #c6e2ff;
+  border: 1px solid #7fb3fa;
+  box-sizing: border-box;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: all 0.15s ease;
+}
+
+.grid div:hover {
+  background-color: #a9d2ff;
+  transform: scale(1.08);
+  z-index: 10;
+  box-shadow: 0 0 8px rgba(41, 128, 185, 0.5);
+}
+
+/* Ship, Hit, Miss styling */
+.ship {
+  background-color: #444 !important;
+  border-color: #222 !important;
+}
+
+.hit {
+  background-color: #e74c3c !important;
+  border-color: #c0392b !important;
+  animation: pulse 1s infinite alternate;
+}
+
+.miss {
+  background-color: #bdc3c7 !important;
+  border-color: #95a5a6 !important;
+}
+
+@keyframes pulse {
+  from { box-shadow: 0 0 5px rgba(231, 76, 60, 0.5); }
+  to { box-shadow: 0 0 10px rgba(231, 76, 60, 0.9); }
+}
+
+/* Ship info panel */
+#ship-info {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: left;
+  max-width: 250px;
+  margin: 20px auto;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+#ship-info h3 {
+  margin-top: 0;
+  color: #2c3e50;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 8px;
+}
+
+#ship-info ul {
+  padding-left: 20px;
+}
+
+#ship-info li {
+  margin: 6px 0;
+  color: #34495e;
+}
+
+/* Color legend */
+#color-legend {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  text-align: left;
+  max-width: 200px;
+  margin: 20px auto;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+#color-legend h3 {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #2c3e50;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 8px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin: 8px 0;
+}
+
+.legend-color {
+  width: 24px;
+  height: 24px;
+  margin-right: 12px;
+  border: 1px solid #999;
+  border-radius: 3px;
+}
+
+.legend-color.ship {
+  background-color: #444;
+}
+
+.legend-color.hit {
+  background-color: #e74c3c;
+}
+
+.legend-color.miss {
+  background-color: #bdc3c7;
+}
+
+/* Ready button styling */
+#ready-button {
+  padding: 12px 25px;
+  background-color: #27ae60;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin: 25px auto;
+  display: block;
+  transition: all 0.2s;
+}
+
+#ready-button:hover {
+  background-color: #2ecc71;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Status message */
+#status-message {
+  margin: 20px auto;
+  padding: 10px;
+  font-weight: bold;
+  color: #2c3e50;
+  background-color: #f8f9fa;
+  border-radius: 5px;
+  max-width: 500px;
+  font-size: 1.1em;
+}
+
+/* Winner animation */
+.winner {
+  animation: winner-glow 1.2s infinite alternate;
+}
+
+@keyframes winner-glow {
+  from {
+    box-shadow: 0 0 15px rgba(46, 204, 113, 0.6);
   }
-  
-  @keyframes winner-glow {
-    from {
-      box-shadow: 0 0 10px 0 rgba(0, 255, 0, 0.5);
-    }
-    to {
-      box-shadow: 0 0 20px 5px rgba(0, 255, 0, 0.8);
-    }
+  to {
+    box-shadow: 0 0 25px rgba(46, 204, 113, 0.9);
   }
-  
-  #play-again-btn {
-    display: block;
-    margin: 20px auto;
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  
-  #play-again-btn:hover {
-    background-color: #45a049;
-  }
-  
+}
+
+/* Play Again button */
+#play-again-btn {
+  display: block;
+  margin: 25px auto;
+  padding: 12px 25px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+#play-again-btn:hover {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
