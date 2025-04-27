@@ -277,3 +277,60 @@ h2 {
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
+
+/* Add this new layout section to your CSS */
+#game-area {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+#grids-container {
+  flex: 2;
+  margin: 0 20px;
+}
+
+/* Update Ship info panel styling */
+#ship-info {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: left;
+  width: 200px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  margin: 0;
+}
+
+/* Update Color legend styling */
+#color-legend {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  text-align: left;
+  width: 200px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  margin: 0;
+}
+
+/* Add responsive layout for smaller screens */
+@media (max-width: 900px) {
+  #game-area {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  #ship-info, #color-legend {
+    width: 80%;
+    max-width: 300px;
+    margin: 10px auto;
+  }
+  
+  #grids-container {
+    margin: 20px 0;
+  }
+}

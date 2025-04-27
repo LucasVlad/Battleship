@@ -15,45 +15,52 @@
     <p id="game-code-display"></p>
   </div>
 
-  <div id="grids">
-    <div>
-      <h2>Your Grid</h2>
-      <div id="your-grid" class="grid"></div>
+  <div id="game-area">
+    <!-- Left side - Legend -->
+    <div id="color-legend">
+      <h3>Legend</h3>
+      <div class="legend-item">
+        <div class="legend-color ship"></div>
+        <span>Your Ship</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color hit"></div>
+        <span>Hit</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color miss"></div>
+        <span>Miss</span>
+      </div>
     </div>
-    <div>
-      <h2>Opponent Grid</h2>
-      <div id="opponent-grid" class="grid"></div>
-    </div>
-  </div>
 
-  <div id="color-legend">
-    <h3>Legend</h3>
-    <div class="legend-item">
-      <div class="legend-color ship"></div>
-      <span>Your Ship</span>
+    <!-- Center - Game Grids -->
+    <div id="grids-container">
+      <div id="grids">
+        <div>
+          <h2>Your Grid</h2>
+          <div id="your-grid" class="grid"></div>
+        </div>
+        <div>
+          <h2>Opponent Grid</h2>
+          <div id="opponent-grid" class="grid"></div>
+        </div>
+      </div>
     </div>
-    <div class="legend-item">
-      <div class="legend-color hit"></div>
-      <span>Hit</span>
-    </div>
-    <div class="legend-item">
-      <div class="legend-color miss"></div>
-      <span>Miss</span>
-    </div>
-  </div>
 
-  <div id="ship-info">
-    <h3>Ship Placement Info</h3>
-    <p id="ship-status">Click a grid cell to place: Carrier (5)</p>
-    <p id="orientation-status">Orientation: Horizontal (Press R to rotate)</p>
-  
-    <ul id="ship-list">
-      <li>Carrier (5)</li>
-      <li>Battleship (4)</li>
-      <li>Destroyer (3)</li>
-      <li>Submarine (3)</li>
-      <li>Patrol Boat (2)</li>
-    </ul>
+    <!-- Right side - Ship Placement Info -->
+    <div id="ship-info">
+      <h3>Ship Placement Info</h3>
+      <p id="ship-status">Click a grid cell to place: Carrier (5)</p>
+      <p id="orientation-status">Orientation: Horizontal (Press R to rotate)</p>
+    
+      <ul id="ship-list">
+        <li>Carrier (5)</li>
+        <li>Battleship (4)</li>
+        <li>Destroyer (3)</li>
+        <li>Submarine (3)</li>
+        <li>Patrol Boat (2)</li>
+      </ul>
+    </div>
   </div>
   
   <button id="ready-button" style="display:none;">I'm Ready</button>
