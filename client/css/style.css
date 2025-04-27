@@ -41,6 +41,47 @@ body {
     gap: 60px;
     margin-top: 20px;
   }
+  
+  #color-legend {
+    max-width: 200px;
+    margin: 20px auto;
+    padding: 10px;
+    background-color: #f1f1f1;
+    border: 1px solid #aaa;
+    border-radius: 8px;
+    text-align: left;
+  }
+  
+  #color-legend h3 {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
+  
+  .legend-item {
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+  }
+  
+  .legend-color {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    border: 1px solid #999;
+  }
+  
+  .legend-color.ship {
+    background-color: #444;
+  }
+  
+  .legend-color.hit {
+    background-color: red;
+  }
+  
+  .legend-color.miss {
+    background-color: lightgray;
+  }
 
   #ship-info {
     text-align: left;
